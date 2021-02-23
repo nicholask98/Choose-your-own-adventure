@@ -174,65 +174,107 @@ def room_URD():
 
 def room_URDL():
     clear()
-    print(' -------   ------- ')
-    print('|                 |')
-    print('|                 |')
-    print('         O         ')
-    print('|                 |')
-    print('|                 |')
-    print(' -------   ------- ')
-
+    return print('+-------   -------+\n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '         O         \n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '+-------   -------+\n')
 # ------------------------------------------
 
 one_door_rooms = [1, 2, 3, 4]
-two_door_rooms = []
-room_options = []
+two_door_rooms = [5, 6, 7, 8, 9, 10]
+three_door_rooms = [11, 12, 13, 14]
+four_door_rooms = [15]
+room_options = [one_door_rooms, two_door_rooms, three_door_rooms, four_door_rooms]
 
-grid = [[0, 0, 0, 0, 0], 
-        [0, 0, 0, 0, 0], 
-        [0, 0, 0, 0, 0], 
-        [0, 0, 0, 0, 0], 
-        [0, 0, 1, 0, 0]]
+# FIXME:
+# if grid[pos_x_y[1]][pos_x_y[0]] == 0:
+#   random room code
+#   assign new key:value in room_dict with result of key: room_count, value: random door function
+# else:
+#   use grid coordinate value to search room_dict for value: random door function
 
-pos_x_y = [2, 4]
+grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0], 
+        [0, 0, 0, 0, 0, 0, 0, 0, 0], 
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+
+pos_x_y = [4, 6]
 room_count = 1
-room_list = []
 
-# FIXME: Each newly visted room should be random. Overwrite grid coordinate if value == 0 using pos_x_y. 
-# FIXME: Replace 0 value with room_count value and increase room_count value. Associate room_count
-# FIXME: value with index of room_list to track the type of visted room.
+room_dict = {
+    1: room_URDL,
 
-new_prompt('You wake up to the sounds of segulls chirping. (Press Enter)')
-new_prompt('The ocean waves crash nearby.')
-new_prompt('You open your eyes and look around')
-user_choice = new_prompt('Enter a direction -- up:[w], left:[a], down:[s], right:[d]. Enter [q] to quit')
+}
+
+# Game Start ======================================================================================
+new_prompt('You wake up to the sound of echoing bats. (Press Enter)')
+new_prompt("The hard surface you're laying on is slightly wet.")
+new_prompt('You open your eyes and look around. There is a single torch lighting up a small room.')
+new_prompt('You find a compass sitting on your chest.')
+new_prompt('The square room has four doors, one on each wall. You decide to explore.')
+# =================================================================================================
+
+room_dict[room_count]()
+
+user_choice = input('Enter a direction -- North:[w], West:[a], South:[s], East:[d]. Enter [q] to quit\n')
+
 
 while user_choice != 'q':
     if user_choice == 'w':
-        if 4 >= pos_x_y[1] > 0:
+        if len(grid) - 1 >= pos_x_y[1] > 0:
             pos_x_y[1] -= 1
         else:
             print("You've come across a wall.")
+            sleep(.5)
+            user_choice = input('Enter a direction or enter [q] to quit\n')
+            continue
     elif user_choice == 'a':
-        if 4 >= pos_x_y[0] > 0:
+        if len(grid) - 1 >= pos_x_y[0] > 0:
             pos_x_y[0] -= 1
         else:
             print("You've come across a wall.")
+            sleep(.5)
+            user_choice = input('Enter a direction or enter [q] to quit\n')
+            continue
     elif user_choice == 's':
-        if 4 > pos_x_y[1] >= 0:
+        if len(grid) - 1 > pos_x_y[1] >= 0:
             pos_x_y[1] += 1
         else:
-            print("You've come across a wall.")        
+            print("You've come across a wall.")
+            sleep(.5)
+            user_choice = input('Enter a direction or enter [q] to quit\n')
+            continue    
     elif user_choice == 'd':
-        if 4 > pos_x_y[0] >= 0:
+        if len(grid) - 1 > pos_x_y[0] >= 0:
             pos_x_y[0] += 1
         else:
             print("You've come across a wall.")
-        
+            sleep(.5)
+            user_choice = input('Enter a direction or enter [q] to quit\n')
+            continue
     else:
-        new_prompt('Invalid selection.')
+        print('Invalid selection.')
+        sleep(.5)
+        user_choice = new_prompt('Enter a direction or enter [q] to quit')
+        continue
+
+    print('valid entry')
+# FIXME: Each newly visted room should be random. Overwrite grid coordinate if value == 0 using pos_x_y. 
+# FIXME: Replace 0 value in grid with room_count value and increment room_count value by 1. Associate room_count
+# FIXME: value with index of room_dict to track the type of visted room.
+
     print('coordinates:{},{}'.format(pos_x_y[0], pos_x_y[1]))
     sleep(.5)
+
+    
     user_choice = new_prompt('Enter a direction or enter [q] to quit')
 
 print('Thanks for playing!')
