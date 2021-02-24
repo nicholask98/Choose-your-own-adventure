@@ -138,6 +138,16 @@ def room_URD():
     print('|                 |')
     print(' -------   ------- ')
 
+def room_UDL():
+    clear()
+    print(' -------   ------- ')
+    print('|                 |')
+    print('|                 |')
+    print('         O        |')
+    print('|                 |')
+    print('|                 |')
+    print(' -------   ------- ')
+
 def room_URL():
     clear()
     print(' -------   ------- ')
@@ -154,16 +164,6 @@ def room_RDL():
     print('|                 |')
     print('|                 |')
     print('         O         ')
-    print('|                 |')
-    print('|                 |')
-    print(' -------   ------- ')
-
-def room_URD():
-    clear()
-    print(' -------   ------- ')
-    print('|                 |')
-    print('|                 |')
-    print('         O        |')
     print('|                 |')
     print('|                 |')
     print(' -------   ------- ')
@@ -185,16 +185,8 @@ def room_URDL():
 
 one_door_rooms = [1, 2, 3, 4]
 two_door_rooms = [5, 6, 7, 8, 9, 10]
-three_door_rooms = [11, 12, 13, 14]
-four_door_rooms = [15]
-room_options = [one_door_rooms, two_door_rooms, three_door_rooms, four_door_rooms]
-
-# FIXME:
-# if grid[pos_x_y[1]][pos_x_y[0]] == 0:
-#   random room code
-#   assign new key:value in room_dict with result of key: room_count, value: random door function
-# else:
-#   use grid coordinate value to search room_dict for value: random door function
+three_door_rooms = [room_URD, room_UDL, room_URL, room_RDL]
+four_door_rooms = [room_URDL]
 
 grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0], 
         [0, 0, 0, 0, 0, 0, 0, 0, 0], 
@@ -267,13 +259,41 @@ while user_choice != 'q':
         continue
 
     print('valid entry')
-# FIXME: Each newly visted room should be random. Overwrite grid coordinate if value == 0 using pos_x_y. 
-# FIXME: Replace 0 value in grid with room_count value and increment room_count value by 1. Associate room_count
-# FIXME: value with index of room_dict to track the type of visted room.
-
     print('coordinates:{},{}'.format(pos_x_y[0], pos_x_y[1]))
     sleep(.5)
 
+# FIXME: Each newly visted room should be random. Overwrite grid coordinate if value == 0 using pos_x_y. 
+# FIXME: Replace 0 value in grid with room_count value and increment room_count value by 1. Associate room_count
+# FIXME: value with index of room_dict to track the type of visted room.
+    if grid[pos_x_y[1]][pos_x_y[0]] == 0:
+        room_count += 1
+        print('room count: {}'.format(room_count))
+        grid[pos_x_y[1]][pos_x_y[0]] = room_count
+        for i in grid:
+            print(i)
+        sleep(.5)
+        # vvv Makes the beginning rooms have more door options
+        if room_count <= 5:
+            # room_dict[room_count] = random.choice(four_door_rooms) #I Think this works now, but I'm testing other stuff
+            # print(room_dict[room_count]())
+            # sleep(2)
+            pass
+        elif room_count <= 10:
+            pass
+        elif room_count <= 20:
+            pass
+        else:
+            pass
+    else:
+        print('already visted this room.')
+        sleep(.5)
+       
+
+# if:
+#   random room code
+#   assign new key:value in room_dict with result of key: room_count, value: random door function
+# else:
+#   use grid coordinate value to search room_dict for value: random door function
     
     user_choice = new_prompt('Enter a direction or enter [q] to quit')
 
