@@ -130,43 +130,43 @@ def room_DL():
 
 def room_URD():
     clear()
-    print(' -------   ------- ')
-    print('|                 |')
-    print('|                 |')
-    print('|        O         ')
-    print('|                 |')
-    print('|                 |')
-    print(' -------   ------- ')
+    return print('+-------   -------+\n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '|        O         \n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '+-------   -------+\n')
 
 def room_UDL():
     clear()
-    print(' -------   ------- ')
-    print('|                 |')
-    print('|                 |')
-    print('         O        |')
-    print('|                 |')
-    print('|                 |')
-    print(' -------   ------- ')
+    return print('+-------   -------+\n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '         O        |\n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '+-------   -------+\n')
 
 def room_URL():
     clear()
-    print(' -------   ------- ')
-    print('|                 |')
-    print('|                 |')
-    print('         O         ')
-    print('|                 |')
-    print('|                 |')
-    print(' ----------------- ')
+    return print('+-------   -------+\n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '         O         \n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '+-----------------+\n')
 
 def room_RDL():
     clear()
-    print(' ----------------- ')
-    print('|                 |')
-    print('|                 |')
-    print('         O         ')
-    print('|                 |')
-    print('|                 |')
-    print(' -------   ------- ')
+    return print('+-----------------+\n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '         O         \n'
+                 '|                 |\n'
+                 '|                 |\n'
+                 '+-------   -------+\n')
 
 # ------------------------------------------
 
@@ -201,7 +201,15 @@ grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
 pos_x_y = [4, 6]
 room_count = 1
 
-room_dict = {
+room_desc_list = [ ''
+
+]
+
+room_desc_dict = {
+    1: 'This is the beginning room. Nothing special here.',
+}
+
+room_doors_dict = {
     1: room_URDL,
 
 }
@@ -214,7 +222,7 @@ new_prompt('You find a compass sitting on your chest.')
 new_prompt('The square room has four doors, one on each wall. You decide to explore.')
 # =================================================================================================
 
-room_dict[room_count]()
+room_doors_dict[room_count]()
 
 user_choice = input('Enter a direction -- North:[w], West:[a], South:[s], East:[d]. Enter [q] to quit\n')
 
@@ -252,50 +260,47 @@ while user_choice != 'q':
             sleep(.5)
             user_choice = input('Enter a direction or enter [q] to quit\n')
             continue
+    elif user_choice == 'g':
+        for i in grid:
+            print(i)
+        input('Press Enter to return.')
     else:
         print('Invalid selection.')
         sleep(.5)
-        user_choice = new_prompt('Enter a direction or enter [q] to quit')
+        user_choice = new_prompt('Enter a direction, enter [g] to view grid or enter [q] to quit')
         continue
-
-    print('valid entry')
-    print('coordinates:{},{}'.format(pos_x_y[0], pos_x_y[1]))
-    sleep(.5)
 
 # FIXME: Each newly visted room should be random. Overwrite grid coordinate if value == 0 using pos_x_y. 
 # FIXME: Replace 0 value in grid with room_count value and increment room_count value by 1. Associate room_count
-# FIXME: value with index of room_dict to track the type of visted room.
+# FIXME: value with index of room_doors_dict to track the type of visted room.
     if grid[pos_x_y[1]][pos_x_y[0]] == 0:
         room_count += 1
-        print('room count: {}'.format(room_count))
         grid[pos_x_y[1]][pos_x_y[0]] = room_count
-        for i in grid:
-            print(i)
-        sleep(.5)
+
         # vvv Makes the beginning rooms have more door options
         if room_count <= 5:
-            # room_dict[room_count] = random.choice(four_door_rooms) #I Think this works now, but I'm testing other stuff
-            # print(room_dict[room_count]())
-            # sleep(2)
+            room_doors_dict[room_count] = four_door_rooms[0] #I Think this works now, but I'm testing other stuff
+            room_doors_dict[room_count]()
             pass
         elif room_count <= 10:
+            room_doors_dict[room_count] = random.choice(four_door_rooms)
             pass
         elif room_count <= 20:
             pass
         else:
             pass
     else:
-        print('already visted this room.')
+        print('already visted this room.') #FIXME: Replace this with a function call based on the room count designated for this room
         sleep(.5)
        
 
 # if:
 #   random room code
-#   assign new key:value in room_dict with result of key: room_count, value: random door function
+#   assign new key:value in room_doors_dict with result of key: room_count, value: random door function
 # else:
-#   use grid coordinate value to search room_dict for value: random door function
+#   use grid coordinate value to search room_doors_dict for value: random door function
     
-    user_choice = new_prompt('Enter a direction or enter [q] to quit')
+    user_choice = input('Enter a direction or enter [q] to quit\n')
 
 print('Thanks for playing!')
 
